@@ -14,7 +14,10 @@ import pdb
 #
 # The function accepts INTEGER_ARRAY q as parameter.
 #
-def minimumBribes(l, q):
+
+# NOTE this fails the huge queue tests, pushing and popping from the list is not
+# fast
+def minimumBribesX(l, q):
     cnt = 0
     # Start from the back of the queue and work our way to the front, counting
     # the number of cuts that took place
@@ -32,7 +35,19 @@ def minimumBribes(l, q):
             cnt += i - (idx + 1)
             q.pop(idx)
             q.insert(i-1, i)
-        print(q)
+    print(cnt)
+
+# From https://www.hackerrank.com/challenges/new-year-chaos/forum/comments/515525
+def minimumBribes(l, q):
+    cnt = 0
+    q = [p-1 for p in q]
+    for i, p in enumerate(q):
+        if p - i > 2:
+            print("Too chaotic")
+            return
+        for j in range(max(p-1,0),i):
+            if q[j] > p:
+                cnt += 1
     print(cnt)
 
 if __name__ == '__main__':
