@@ -26,6 +26,7 @@ class Node():
 
     def connect(self, peer):
         self.connections.add(peer)
+        peer.connections.add(self)
         print(f"Connect {self.id} to {peer}")
 
     def __str__(self):
@@ -40,13 +41,22 @@ class Node():
     def __eq__(self, other):
         return self.id == other.id
 
-    def traverse(self, color, depth=0):
+    def traverse(self, color, depth=0, prev=None):
         depth += 1
         for p in self.connections:
+            print(f"From {self} Testing peer {p} color {color}")
+            if prev is not None and p == prev:
+                print(f"p {p} Prev {prev}")
+                continue # Don't count where we just were
             if p.color == color:
+                print(f"Found color {color} on {p} prev {prev}")
                 return depth
         for p in self.connections:
-            v = p.traverse(color, depth)
+            if prev is not None and p == prev:
+                print(f"traverse p {p} Prev {prev}")
+                continue # Don't count where we just were
+            print(f"Traverse from {self} to {p} depth {depth}")
+            v = p.traverse(color, depth, self)
             if v is not None:
                 return v
         return None
@@ -77,6 +87,8 @@ def findShortest(graph_nodes, graph_from, graph_to, ids, val):
         g.connect(f, t)
 
     nodes = g.findNodesOfColor(val)
+    if len(nodes) < 2:
+        return -1
     vals = []
     for n in nodes:
         c = n.traverse(val)
