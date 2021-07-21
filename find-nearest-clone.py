@@ -21,6 +21,18 @@ class Node():
     def __init__(self, _id, color):
         self.id = _id
         self.color = color
+        self.connections = set()
+        print(f"Add {self.id} color {color}")
+
+    def connect(self, peer):
+        self.connections.add(peer)
+        print(f"Connect {self.id} to {peer}")
+
+    def __str__(self):
+        return f"<Node {self.id} color {self.color}>"
+
+    def __repr__(self):
+        return f"<Node {self.id} color {self.color}>"
 
     def __hash__(self):
         return hash(self.id)
@@ -40,17 +52,23 @@ class Graph():
         return n
 
     def connect(self, frm, to):
-        pass
+        self.nodes[frm].connect(self.nodes[to])
+
+    def findNodesOfColor(self, c):
+        return [n for n in self.nodes.values() if n.color == c]
+
 
 def findShortest(graph_nodes, graph_from, graph_to, ids, val):
     g = Graph()
     for i, c in enumerate(ids, 1):
-        print(i,c)
         g.addNode(i, c)
     for f, t in zip_longest(graph_from, graph_to):
-        print(f,t)
         g.connect(f, t)
-    print(1)
+
+    nodes = g.findNodesOfColor(val)
+    print(nodes)
+
+    return 1
 
 if __name__ == '__main__':
     fptr = open(os.environ['OUTPUT_PATH'], 'w')

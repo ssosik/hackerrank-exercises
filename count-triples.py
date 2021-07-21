@@ -21,11 +21,13 @@ def countTriplets(arr, r):
     i = int(j/r)
     k = int(j*r)
     cnt += left[i] * right[k]
+    print(cnt)
     for x in range(2, len(arr) - 1):
-        #print(x, j)
+        print(x, j)
         i = int(j/r)
         k = int(j*r)
         cnt += left[i] * right[k]
+        print(cnt)
 
         left[j] += 1
         j = arr[x]
