@@ -40,6 +40,17 @@ class Node():
     def __eq__(self, other):
         return self.id == other.id
 
+    def traverse(self, color, depth=0):
+        depth += 1
+        for p in self.connections:
+            if p.color == color:
+                return depth
+        for p in self.connections:
+            v = p.traverse(color, depth)
+            if v is not None:
+                return v
+        return None
+
 class Graph():
     def __init__(self):
         self.nodes = dict()
@@ -66,9 +77,17 @@ def findShortest(graph_nodes, graph_from, graph_to, ids, val):
         g.connect(f, t)
 
     nodes = g.findNodesOfColor(val)
+    vals = []
+    for n in nodes:
+        c = n.traverse(val)
+        if c is not None:
+            vals.append(c)
+        print(f"Walk from {n} took {c}")
     print(nodes)
 
-    return 1
+    if len(vals) == 0:
+        return -1
+    return min(vals)
 
 if __name__ == '__main__':
     fptr = open(os.environ['OUTPUT_PATH'], 'w')
