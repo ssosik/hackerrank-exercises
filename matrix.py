@@ -83,6 +83,9 @@ class Graph():
 
     def connect(self, frm, to):
         self.nodes[frm].connect(self.nodes[to])
+        key = [frm, to]
+        key.sort()
+        edges[tuple(key)] = "foo"
 
     def findNodesWithMachines(self, c):
         return [n for n in self.nodes.values() if n.has_machine]
